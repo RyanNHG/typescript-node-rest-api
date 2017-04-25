@@ -7,19 +7,19 @@ class App {
 
   public express: express.Application
 
-  constructor () {
+  constructor() {
     this.express = express()
     this.middleware()
     this.routes()
   }
 
-  private middleware (): void {
+  private middleware(): void {
     this.express.use(logger('dev'))
     this.express.use(bodyParser.json())
     this.express.use(bodyParser.urlencoded({ extended: true }))
   }
 
-  private routes (): void {
+  private routes(): void {
     let router = express.Router()
     router.get('/', (req, res, next) => {
       res.json({
