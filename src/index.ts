@@ -1,8 +1,12 @@
 import * as http from 'http'
 import * as debug from 'debug'
-import app from './app'
+import App from './app'
 
 debug('ts-express:server')
+
+let app = App({
+  testing: false
+})
 
 const port = normalizePort(process.env.PORT || 3000)
 app.set('port', port)

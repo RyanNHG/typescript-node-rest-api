@@ -1,5 +1,6 @@
 const gulp = require('gulp')
 const ts = require('gulp-typescript')
+const mocha = require('gulp-mocha')
 const JSON_FILES = ['src/*.json', 'src/**/*.json']
 const OUTPUT_FOLDER = 'dist'
 
@@ -13,7 +14,25 @@ gulp.task('scripts', () =>
     .pipe(gulp.dest(OUTPUT_FOLDER))
 )
 
-gulp.task('watch', ['scripts'], () => {
+function testTask (options) {
+  return () => 
+    gulp
+      .src('tests/**/*.test.ts')
+      .pipe(mocha(options))
+      .once('error', () => process.exit(1))
+      .once('end', () => process.exit())
+}
+
+gulp.task('test', testTask({ 
+  compilers: 'ts:ts-node/register'
+}))
+
+gulp.task('test-watch', testTask({
+  watch: 'tests/**/*.test.ts',  
+  compilers: 'ts:ts-node/register'
+}))
+
+gulp.task('watch', ['scripts', 'test-watch'], () => {
   gulp.watch('src/**/*.ts', ['scripts'])
 })
 
